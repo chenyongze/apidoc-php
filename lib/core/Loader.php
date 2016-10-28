@@ -1,5 +1,5 @@
 <?php
-namespace api;
+namespace core;
 
 use \Exception;
 
@@ -22,19 +22,19 @@ class Loader
      */
     public static function autoload($class)
     {
-        if (!empty(self::$namespace)) {
-            list($name, $class) = explode('\\', $class, 2);
+        if (!empty(static::$namespace)) {
+            list($name, $class) = explode(BS, $class, 2);
 
-            if (isset(self::$namespace[$name])) {
-                $path = self::$namespace[$name];
+            if (isset(static::$namespace[$name])) {
+                $path = static::$namespace[$name];
             } else {
                 throw new Exception("{$class} `{$name}`" . ' namespace is not define');
             }
         }
 
-        $basename = $path . DS . str_replace('\\', DS, $class);
+        $basename = $path . DS . str_replace(BS, DS, $class);
 
-        // TODO 可以做成单例加载
+        // todo 可以做成单例加载
         if (is_file($filename = $basename . PHP_EXT)) {
             include $filename;
         } else {
@@ -43,28 +43,24 @@ class Loader
     }
 
     /**
-     * 获取实例，可执行方法
-     * @param  string $class  类名
-     * @param  string $method 方法名
+     * 获取实例
      *
-     * @return mixed
+     * @param  string $class  类名
+     * @param  string $namespace 命名空间
+     *
      * @throws Exception
      */
-    public static function instance($class, $method = '')
+    public static function instance($class, $namespace = '')
     {
         static $_instance = [];
-        $indentity = $class . $method;
+
+        $indentity = rtrim($namespace, BS) . BS . $class;
 
         if (!isset($_instance[$indentity])) {
-            if (class_exists($class)) {
-                $object = new $class();
-                if (!empty($method) && method_exists($object, $method)) {
-                    $_instance[$indentity] = call_user_func_array([&$object, $method], []);
-                } else {
-                    $_instance[$indentity] = $object;
-                }
+            if (class_exists($indentity)) {
+                $_instance[$indentity] = new $indentity();
             } else {
-                throw new Exception('class not exist :' . $class, 10007);
+                throw new Exception('class not exist :' . $indentity, 10007);
             }
         }
 
@@ -73,15 +69,16 @@ class Loader
 
     /**
      * 添加命名空间，后续自动加载将根据namespace进行寻径
+     *
      * @param array|string $namespace 命名空间
      * @param string       $path      路径
      */
     public static function addNamespace($namespace, $path = '')
     {
         if (is_array($namespace)) {
-            self::$namespace = array_merge(self::$namespace, $namespace);
+            static::$namespace = array_merge(static::$namespace, $namespace);
         } else {
-            self::$namespace[$namespace] = $path;
+            static::$namespace[$namespace] = $path;
         }
     }
 }
