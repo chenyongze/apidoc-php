@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-namespace api;
+namespace core;
 
 define('ROOT_PATH', dirname(__DIR__));
 

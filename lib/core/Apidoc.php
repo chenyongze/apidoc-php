@@ -20,7 +20,19 @@ class Apidoc
 
     public static function parse(array $options)
     {
+        // todo merge options
 
+        $parseFiles = $parseFileNames = [];
+
+        if (is_array($options['src'])) {
+            foreach ($options['src'] as $folder) {
+                $options['src'] = $folder and Parser::parseFiles($options, $parseFiles, $parseFileNames);
+            }
+        } else {
+            Parser::parseFiles($options, $parseFiles, $parseFileNames);
+        }
+
+        return true;
     }
 
     public static function app($name, $arguments)

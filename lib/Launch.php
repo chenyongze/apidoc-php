@@ -34,6 +34,8 @@ class Launch
             'version' => $package['version']
         ]);
         // todo 设置apidoc app相关设置
+
+        $api = Apidoc::parse($options);
     }
 
     protected static function defaults()

@@ -45,26 +45,28 @@ class Loader
     /**
      * 获取实例
      *
-     * @param  string $class  类名
-     * @param  string $namespace 命名空间
+     * @param  string  $class  类名
+     * @param  string  $namespace 命名空间
+     * @param  boolean $singleton 是否单例
      *
      * @throws Exception
      */
-    public static function instance($class, $namespace = '')
+    public static function instance($class, $namespace = '', $singleton = true)
     {
         static $_instance = [];
 
-        $indentity = rtrim($namespace, BS) . BS . $class;
+        $class = rtrim($namespace, BS) . BS . $class;
 
-        if (!isset($_instance[$indentity])) {
-            if (class_exists($indentity)) {
-                $_instance[$indentity] = new $indentity();
+        if (!isset($_instance[$class])) {
+            if (class_exists($class)) {
+                $indentity = new $class();
+                $singleton and $_instance[$class] = $indentity;
             } else {
-                throw new Exception('class not exist :' . $indentity, 10007);
+                throw new Exception('class not exist :' . $class, 10007);
             }
         }
 
-        return $_instance[$indentity];
+        return $_instance[$class];
     }
 
     /**
