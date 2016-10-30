@@ -7,8 +7,12 @@ define('ROOT_PATH', dirname(__DIR__));
 require ROOT_PATH . '/base.php';
 require CORE_PATH . DS . 'Loader.php';
 
-Loader::addNamespace(NS_API, LIB_PATH);
-Loader::addNamespace(NS_CORE, CORE_PATH);
+Config::import(COMMON_PATH . DS . 'config');
+
+Loader::addNamespace([
+    NS_API  => LIB_PATH,
+    NS_CORE => CORE_PATH
+]);
 Loader::register();
 
 $argv = Loader::instance('api\core\Nomnom')

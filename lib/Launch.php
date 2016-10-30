@@ -16,7 +16,7 @@ class Launch
         ];
     }
 
-    public function createDoc(array $options)
+    public function createDoc(array &$options)
     {
         $options = array_merge(static::defaults(), $options);
 
@@ -36,6 +36,22 @@ class Launch
         // todo 设置apidoc app相关设置
 
         $api = Apidoc::parse($options);
+
+        if ($api === true || $api === false) {
+            return $api;
+        }
+
+        if (self::app['options']['parse'] !== true) {
+            static::createOutputFiles($api);
+        }
+
+        return $api;
+    }
+
+    protected static function createOutputFiles($api)
+    {
+        // todo write api to file
+        var_dump($api);
     }
 
     protected static function defaults()
