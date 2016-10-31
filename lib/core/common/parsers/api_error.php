@@ -1,10 +1,10 @@
 <?php
 namespace api\parsers;
 
-use core\File;
+use core\Loader;
 
-// todo 这里有问题，没有加单例，而且会造成变量有污染
-$apiParser = File::load('./api_param.php');
+$apiParser = Loader::instance('Parsers', NS_CORE)['api_param'];
+
 return [
     'parse'         => function($content, $source) use ($apiParser) {
         return $apiParser['parse']($content, $source, 'Error 4xx');

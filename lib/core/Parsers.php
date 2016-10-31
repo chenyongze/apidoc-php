@@ -1,32 +1,33 @@
 <?php
 namespace core;
 
-class Parsers extends common\ArrayAccess
+use core\common\Gen;
+
+class Parsers extends Gen
 {
-    protected static $instance;
-
-    public static function instance()
-    {
-        if (empty(static::$instance)) {
-            self::$instance = new static();
-        }
-
-        return self::$instance;
-    }
-
+    /**
+     * @param string $name 解析器名称(如:apisuccess)
+     * @return null
+     */
     public function getParser($name)
     {
-        $class = NS_COMM . BS . $name;
+        $file = self::path($name);
 
-        if (class_exists($name)) {
-            return Loader::instance($class);
-        }
+        $result = reset(File::load($file));
 
-        return null;
+        return $result ?: null;
     }
 
-    function offsetGet($index)
+    private static function path($name)
     {
-        return $this->getParser($index);
+        $prefix = Config::get('parser_prefix', 'common');
+        $name = ucfirst($prefix) . ucfirst(str_replace([$prefix, '_'], '', strtolower($name)));
+
+        return PARSE_PATH . DS . $name;
+    }
+
+    public function offsetGet($name)
+    {
+        return $this->getParser($name);
     }
 }
