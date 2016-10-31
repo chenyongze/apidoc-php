@@ -14,5 +14,6 @@ define('DEF_TPL_PATH', ROOT_PATH . DS . 'template');
 
 define('NS_API', 'api');
 define('NS_CORE', 'core');
+define('NS_COMM', 'core' . BS . 'common');
 
 define('PHP_EXT', '.php');
