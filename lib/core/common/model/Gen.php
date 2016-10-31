@@ -2,7 +2,7 @@
 /**
  * 提供了对象属性的数组式访问，实现了对象的遍历、计数接口
  */
-namespace core\common;
+namespace core\common\model;
 
 use \IteratorAggregate;
 use \Countable;
@@ -10,7 +10,7 @@ use \ArrayAccess;
 use \ArrayIterator;
 use \ReflectionObject;
 
-class Gen implements IteratorAggregate, Countable, ArrayAccess
+abstract class Gen implements IteratorAggregate, Countable, ArrayAccess
 {
     /**
      * @return array
