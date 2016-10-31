@@ -60,7 +60,13 @@ class Loader
         if (!isset($_instance[$class])) {
             if (class_exists($class)) {
                 $indentity = new $class();
-                $singleton and $_instance[$class] = $indentity;
+
+                // 非单例模式下直接返回实例
+                if (!$singleton) {
+                    return $indentity;
+                }
+
+                $_instance[$class] = $indentity;
             } else {
                 throw new Exception('class not exist :' . $class, 10007);
             }

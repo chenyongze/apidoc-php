@@ -7,6 +7,8 @@ class File
     {
         $scan = [];
 
+        is_array($files) or $files = [$files];
+
         if (!empty($files)) {
             foreach ($files as $file) {
                 if (is_file($file)) {

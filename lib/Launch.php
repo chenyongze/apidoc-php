@@ -41,7 +41,7 @@ class Launch
             return $api;
         }
 
-        if (self::app['options']['parse'] !== true) {
+        if (self::$app['options']['parse'] !== true) {
             static::createOutputFiles($api);
         }
 
