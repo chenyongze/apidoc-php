@@ -34,16 +34,19 @@ class Parser
         // todo encoding file content
         $content = preg_replace('/\r\n/', "\n", file_get_contents($fileName));
 
+        // 分解块注释文件
         $blocks = static::findBlock($content);
 
         if (empty($blocks)) {
             return false;
         }
 
+        // 将各块注释分解成元素
         $elements = array_map(function($block) use ($fileName) {
-            return static::findElements($block, $fileName);
+            $elements = static::findElements($block, $fileName);
+            return $elements;
         }, $blocks);
-var_dump($elements);exit;
+
         if (empty($elements)) {
             return false;
         }
@@ -53,7 +56,6 @@ var_dump($elements);exit;
             return false;
         }
 
-
         return static::parseBlockElements($indexApiBlocks, $elements, $fileName);
     }
 
@@ -62,6 +64,7 @@ var_dump($elements);exit;
         $blocks = [];
 
         $content = preg_replace('/\n/', WRAP, $content);
+
         $blockRegExp = Language::load(self::$ext);
 
         preg_match_all($blockRegExp['docBlocksRegExp'], $content, $matches, PREG_SET_ORDER);
@@ -76,23 +79,23 @@ var_dump($elements);exit;
         return $blocks;
     }
 
-    private static function findElements($block, $fileName)
+    private static function findElements($block)
     {
         $elements = [];
 
         // Replace Linebreak with Unicode
-        $block = preg_replace('/\n/', WRAP, $block);
-        
+        $block = preg_replace('/\\\n/', WRAP, $block);
+
         // Elements start with @
-        $elementsRegExp = "/(@(\w*)\s?(.+?)(?=\x{ffff}[\s\*]*@|$))/m";
+        $elementsRegExp = "/(@(\w*)\s?(.+?)(?=" . WRAP . "[\s\*]*@|$))/m";
         preg_match_all($elementsRegExp, $block, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {
             $element = [
-                'source'     => preg_replace('/\x{ffff}/g', "\n", $matches[1]),
-                'name'       => strtolower($matches[2]),
-                'sourceName' => $matches[2],
-                'content'    => preg_replace('/\x{ffff}/g', "\n", $matches[3])
+                'source'     => preg_replace('/' . WRAP . '/', '\n', $match[1]),
+                'name'       => strtolower($match[2]),
+                'sourceName' => $match[2],
+                'content'    => preg_replace('/' . WRAP . '/', '\n', $match[3])
             ];
             // todo add hook func
 
@@ -117,9 +120,9 @@ var_dump($elements);exit;
                 if (substr($blocks[$i][$j]['name'], 0, 3) === 'api') {
                     $found = true;
                 }
-
-                $found and $foundIndexes[] = $i;
             }
+
+            $found and $foundIndexes[] = $i;
         }
 
         return $foundIndexes;
@@ -134,7 +137,7 @@ var_dump($elements);exit;
             $countAllowedMultiple = 0;
 
             for ($j = 0; $j < count($elements); $j++) {
-                list($element, $elementParser) = [$elements[$j], static::parsers($elements[$j])];
+                list($element, $elementParser) = [$elements[$j], Loader::instance('Parsers', NS_CORE)[$elements[$j]['name']]];
 
                 $pathTo = $attachMethod = '';
 
@@ -187,7 +190,7 @@ var_dump($elements);exit;
                 array_push($parsedBlocks, $blockData);
             }
         }
-
+var_dump($parsedBlocks);exit;
         return $parsedBlocks;
     }
 
@@ -222,17 +225,5 @@ var_dump($elements);exit;
         }
 
         return $current;
-    }
-
-    private static function parsers($name)
-    {
-        static $parser;
-        $name = preg_replace(Config::get('parser_prefix_reg'), '$1_', $name);
-
-        if (!isset($parser[$name])) {
-            $parser[$name] = File::load(COMMON_PATH . DS . 'parsers' . $name . PHP_EXT);
-        }
-
-        return $parser[$name];
     }
 }

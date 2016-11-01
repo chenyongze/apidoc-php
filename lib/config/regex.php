@@ -2,7 +2,7 @@
 return [
     'wrap' => '##{WRAP}##',
 
-    'parser_prefix_reg' => '/^(api)/g',
+    'parser_prefix' => 'api',
 
     'api_param_reg' => [
         'b' =>               '^',                                   // start
