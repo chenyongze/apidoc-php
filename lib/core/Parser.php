@@ -136,7 +136,7 @@ class Parser
             $blockData = ['global' => [], 'local'  => []];
             $countAllowedMultiple = 0;
 
-            $index = 1; // apiname
+            $index = 4; // apiparam
             $name = $elements[$index]['name'];
             $content = $elements[$index]['content'];
             $source = $elements[$index]['source'];
