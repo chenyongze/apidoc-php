@@ -13,6 +13,8 @@ class Parsers extends Gen
     {
         static $parsers;
 
+        $name = strtolower($name);
+
         if (!isset($parsers[$name])) {
             $file = self::path($name);
             $result = reset(File::load($file));
@@ -26,7 +28,7 @@ class Parsers extends Gen
     {
         $prefix = Config::get('parser_prefix', 'regex');
 
-        $name = ucfirst($prefix) . ucfirst(str_replace([$prefix, '_'], '', strtolower($name)));
+        $name = ucfirst($prefix) . ucfirst(str_replace([$prefix, '_'], '', $name));
 
         return PARSE_PATH . DS . $name . PHP_EXT;
     }

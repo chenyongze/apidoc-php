@@ -4,6 +4,7 @@ return [
 
     'parser_prefix' => 'api',
 
+    // todo 我觉得这个就是整个设计核心了,很有借鉴意义
     'api_param_reg' => [
         'b' =>               '^',                                   // start
         'oGroup' => [                                               // optional 'group'=> (404)

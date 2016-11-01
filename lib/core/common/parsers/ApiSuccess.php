@@ -3,7 +3,7 @@ namespace api\parsers;
 
 use core\Loader;
 
-$apiParser = Loader::instance('Parsers', NS_CORE)['apiparam'];
+$apiParser = Loader::instance('Parsers', NS_CORE)['ApiParam'];
 
 return [
     'parse'                 => function($content, $source) use ($apiParser) {
