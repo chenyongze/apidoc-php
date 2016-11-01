@@ -17,7 +17,7 @@ class Util
 
         list($start, $end) = [reset($xs), end($xs)];
 
-        // todo
+        // todo 移植过程中发现不是很明白这个的意思，有点复杂
         return $string;
     }
 
