@@ -136,6 +136,16 @@ class Parser
             $blockData = ['global' => [], 'local'  => []];
             $countAllowedMultiple = 0;
 
+            $index = 1; // apiname
+            $name = $elements[$index]['name'];
+            $content = $elements[$index]['content'];
+            $source = $elements[$index]['source'];
+
+            $parser = Loader::instance('Parsers', NS_CORE)[$name];
+            $values = $parser['parse']($content, $source);
+            var_dump($values);
+            exit;
+
             for ($j = 0; $j < count($elements); $j++) {
                 list($element, $elementParser) = [$elements[$j], Loader::instance('Parsers', NS_CORE)[$elements[$j]['name']]];
 
