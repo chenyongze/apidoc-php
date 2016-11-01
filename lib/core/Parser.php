@@ -137,18 +137,24 @@ class Parser
             $blockData = ['global' => [], 'local'  => []];
             $countAllowedMultiple = 0;
 
-            $index = 14; // apierrorExample
-            $name = $elements[$index]['name'];
-            $content = $elements[$index]['content'];
-            $source = $elements[$index]['source'];
-
-            $parser = Loader::instance('Parsers', NS_CORE)[$name];
-            $values = $parser['parse']($content, $source);
-            var_dump($values);
-            exit;
+            /**
+             * 调试解析器代码
+             * $index = 14; // parser index
+             * $name = $elements[$index]['name'];
+             * $content = $elements[$index]['content'];
+             * $source = $elements[$index]['source'];
+             * $parser = Loader::instance('Parsers', NS_CORE)[$name];
+             * $values = $parser['parse']($content, $source);
+             * var_dump($values);
+             * exit;
+             */
 
             for ($j = 0; $j < count($elements); $j++) {
                 list($element, $elementParser) = [$elements[$j], Loader::instance('Parsers', NS_CORE)[$elements[$j]['name']]];
+
+                if (empty($elementParser)) {
+                    continue;
+                }
 
                 $pathTo = $attachMethod = '';
 
@@ -176,7 +182,7 @@ class Parser
                 }
 
                 // todo A lot of exception
-                if (!$blockData[$pathTo]) {
+                if (!isset($blockData[$pathTo])) {
                     static::createObjectPath($blockData, $pathTo, $attachMethod);
                 }
 
@@ -190,10 +196,11 @@ class Parser
                 }
 
                 // insert Fieldvalues in Mainpath
-                if ($elementParser['extendRoot'] === true) {
+                if (isset($elementParser['extendRoot']) && $elementParser['extendRoot'] === true) {
                     $blockData = array_merge($blockData, $values);
                 }
 
+                !isset($blockData['index']) and $blockData['index'] = 0;
                 $blockData['index']++;
             }
 
@@ -201,7 +208,7 @@ class Parser
                 array_push($parsedBlocks, $blockData);
             }
         }
-var_dump($parsedBlocks);exit;
+
         return $parsedBlocks;
     }
 
@@ -235,6 +242,6 @@ var_dump($parsedBlocks);exit;
             $current = &$current[$part];
         }
 
-        return $current;
+        return $current ?: [];
     }
 }
