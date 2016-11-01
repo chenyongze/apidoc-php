@@ -1,13 +1,14 @@
 <?php
 namespace core;
 
+// todo 说真的，我觉得我这个File类写的真是一坨屎
 class File
 {
     public static function scan($files)
     {
         $scan = [];
 
-        is_array($files) or $files = [$files];
+        !is_array($files) and $files = [$files];
 
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -18,8 +19,8 @@ class File
                     // 加载目录
                     $scanFiles = array_diff(scandir($file), ['.', '..']);
                     foreach ($scanFiles as $scanFile) {
-                        $file = $file . DS . $scanFile;
-                        is_file($file) and $scan[$scanFile] = $file;
+                        $loadfile = rtrim($file, DS) . DS . $scanFile;
+                        is_file($loadfile) and $scan[$scanFile] = $loadfile;
                     }
                 }
             }
@@ -32,6 +33,8 @@ class File
     {
         $load = [];
 
+        !is_array($files) and $files = [$files];
+
         if (!empty($files)) {
             foreach ($files as $file) {
                 if (is_file($file)) {
@@ -41,8 +44,8 @@ class File
                     // 加载目录
                     $scanFiles = array_diff(scandir($file), ['.', '..']);
                     foreach ($scanFiles as $scanFile) {
-                        $file = $file . DS . $scanFile;
-                        is_file($file) and $load[$scanFile] = include $file;
+                        $loadfile = rtrim($file, DS) . $scanFile;
+                        is_file($loadfile) and $load[$scanFile] = include $loadfile;
                     }
                 }
             }

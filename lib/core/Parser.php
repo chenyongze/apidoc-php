@@ -32,9 +32,10 @@ class Parser
         static::$ext = strtolower(pathinfo($fileName)['extension']);
 
         // todo encoding file content
-        $content = preg_replace('/\r\n/g', "\n", File::load($fileName));
+        $content = preg_replace('/\r\n/', "\n", file_get_contents($fileName));
 
         $blocks = static::findBlock($content);
+
         if (empty($blocks)) {
             return false;
         }
@@ -42,7 +43,7 @@ class Parser
         $elements = array_map(function($block) use ($fileName) {
             return static::findElements($block, $fileName);
         }, $blocks);
-
+var_dump($elements);exit;
         if (empty($elements)) {
             return false;
         }
@@ -60,14 +61,15 @@ class Parser
     {
         $blocks = [];
 
-        $content = preg_replace('/\n/g', "\uffff", $content);
+        $content = preg_replace('/\n/', WRAP, $content);
         $blockRegExp = Language::load(self::$ext);
 
         preg_match_all($blockRegExp['docBlocksRegExp'], $content, $matches, PREG_SET_ORDER);
 
         // todo 可能有点问题
         foreach ($matches as $match) {
-            $block = preg_replace(["/\uffff/", $blockRegExp['inlineRegExp']], ["\n", ''], $match[2] ?: $match[1]);
+            preg_match($blockRegExp['inlineRegExp'], $match[1] ?: $match[0], $ret);
+            $block = preg_replace(['/' . WRAP . '/u', $blockRegExp['inlineRegExp']], ['\n', ''], $match[1] ?: $match[0]);
             $blocks[] = $block;
         }
 
@@ -79,17 +81,18 @@ class Parser
         $elements = [];
 
         // Replace Linebreak with Unicode
-        $block = preg_replace('/\n/g', "\uffff", $block);
+        $block = preg_replace('/\n/', WRAP, $block);
+        
         // Elements start with @
-        $elementsRegExp = "/(@(\w*)\s?(.+?)(?=\uffff[\s\*]*@|$))/m";
+        $elementsRegExp = "/(@(\w*)\s?(.+?)(?=\x{ffff}[\s\*]*@|$))/m";
         preg_match_all($elementsRegExp, $block, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {
             $element = [
-                'source'     => preg_replace('/\uffff/g', "\n", $matches[1]),
+                'source'     => preg_replace('/\x{ffff}/g', "\n", $matches[1]),
                 'name'       => strtolower($matches[2]),
                 'sourceName' => $matches[2],
-                'content'    => preg_replace('/\uffff/g', "\n", $matches[3])
+                'content'    => preg_replace('/\x{ffff}/g', "\n", $matches[3])
             ];
             // todo add hook func
 

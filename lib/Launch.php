@@ -2,6 +2,7 @@
 namespace api;
 
 use core\Apidoc;
+use core\Config;
 
 class Launch
 {
@@ -20,7 +21,12 @@ class Launch
     {
         $options = array_merge(static::defaults(), $options);
 
+        define('WRAP', Config::get('wrap', 'regex'));
+
+        // Options
         static::$app['options'] = $options;
+
+        // todo Logger
 
         // todo 引入markdown解析器
 
@@ -51,7 +57,7 @@ class Launch
     protected static function createOutputFiles($api)
     {
         // todo write api to file
-        var_dump($api);
+        //var_dump($api);
     }
 
     protected static function defaults()

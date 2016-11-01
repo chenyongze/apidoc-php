@@ -1,5 +1,5 @@
 <?php
 return [
-    'docBlocksRegExp' => '/\/\*\*\uffff?(.+?)\uffff?(?:\s*)?\*\//',
-    'inlineRegExp'    => '/^(\s*)?(\*)[ ]?/m'
+    'docBlocksRegExp' => '/\/\*\*'. WRAP . '?(.+?)' . WRAP . '?(?:\s*)?\*\//u',
+    'inlineRegExp'    => '/(\s*)?(\*)[ ]?/'
 ];

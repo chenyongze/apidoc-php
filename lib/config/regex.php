@@ -1,6 +1,6 @@
 <?php
 return [
-    'cn' => '\uffff',
+    'wrap' => '##{WRAP}##',
 
     'parser_prefix_reg' => '/^(api)/g',
 

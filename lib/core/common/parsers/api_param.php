@@ -20,7 +20,7 @@ return [
     //     wName -> wrapper for field
     'parse'         => function($content, $source, $defaultGroup) {
         // replace Linebreak with Unicode
-        $content = preg_replace('/\n/g', "\uffff", trim($content));
+        $content = preg_replace('/\n/g', "\x{ffff}", trim($content));
         $parseRegExp = DS . Util::objectValuesToString(Config::get('api_param_reg')) . DS;
 
         preg_match($parseRegExp, $content, $matches);
@@ -34,7 +34,7 @@ return [
 
         // Replace Unicode Linebreaks in description
         if ($matches[10]) {
-            $matches[10] = preg_replace('/\uffff/g', "\n", $matches[10]);
+            $matches[10] = preg_replace('/\x{ffff}/g', "\n", $matches[10]);
         }
 
         // Set global group variable

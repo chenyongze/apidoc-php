@@ -17,8 +17,8 @@ class Nomnom
         $parseResult['_'] = [];
         $parseResult['file-filters'] = '.*\\.(clj|coffee|cpp|cs|dart|erl|exs?|go|groovy|ino?|java|js|litcoffee|lua|php|py|rb|scala|ts|pm)$';
         $parseResult['exclude-filters'] = '';
-        $parseResult['input'] = './';
-        $parseResult['output'] = './doc/';
+        $parseResult['input'] = '/data/apidoc-php/myapp/';
+        $parseResult['output'] = '/data/apidoc-php/result/';
         $parseResult['template'] = '/data/node/apidoc/template/';
         $parseResult['config'] = './';
         $parseResult['verbose'] = false;
@@ -28,7 +28,7 @@ class Nomnom
         $parseResult['silent'] = false;
         $parseResult['simulate'] = false;
         $parseResult['markdown'] = true;
-        $parseResult['encoding'] = 'utf8';
+        $parseResult['encoding'] = UTF8;
 
         return $parseResult;
     }
