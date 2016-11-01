@@ -18,6 +18,7 @@ class Parser
 
         $files = File::scan($options['src']);
 
+        // todo plz check preg replace or string replace
         foreach ($files as $fileName) {
             $parseFile = static::parseFile($fileName, $options['encoding']);
             if ($parseFile) {
@@ -136,7 +137,7 @@ class Parser
             $blockData = ['global' => [], 'local'  => []];
             $countAllowedMultiple = 0;
 
-            $index = 12; // apiparam
+            $index = 14; // apierrorExample
             $name = $elements[$index]['name'];
             $content = $elements[$index]['content'];
             $source = $elements[$index]['source'];
