@@ -1,0 +1,15 @@
+{
+  "require": {
+    "yinggaozhen/zaor-composer": "@dev"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    },
+    "zaor-composer": {
+      "type": "git",
+      "url": "git@github.com:yinggaozhen/zaor-composer.git"
+    }
+  }
+}

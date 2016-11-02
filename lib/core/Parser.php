@@ -162,6 +162,7 @@ class Parser
                 try {
                     // parse element and retrieve values
                     $values = $elementParser['parse']($element['content'], $element['source']);
+                    // todo BEGIN
 
                     // HINT: pathTo MUST be read after elementParser.parse, because of dynamic paths
                     // Add all other options after parse too, in case of a custom plugin need to modify params.
