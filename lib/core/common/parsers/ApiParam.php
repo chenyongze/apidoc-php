@@ -5,7 +5,8 @@ use core\common\Util;
 use core\Config;
 
 $groupFunc = function () {
-    return '';
+    // todo group
+    return 'Parameter';
 };
 
 return [

@@ -31,7 +31,7 @@ class Launch
         // todo 引入markdown解析器
 
         // todo 获取包解析类
-        $package = json_decode(file_get_contents(ROOT_PATH . DS . 'package.json'), true);
+        $package = @json_decode(file_get_contents(ROOT_PATH . DS . 'package.json'), true);
 
         Apidoc::app('generator', [
             'name'    => $package['name'],
@@ -43,7 +43,7 @@ class Launch
 
         $api = Apidoc::parse($options);
 
-        if ($api === true || $api === false) {
+        if (is_bool($api)) {
             return $api;
         }
 
@@ -57,7 +57,7 @@ class Launch
     protected static function createOutputFiles($api)
     {
         // todo write api to file
-        //var_dump($api);
+        var_dump($api);
     }
 
     protected static function defaults()

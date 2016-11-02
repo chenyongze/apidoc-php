@@ -162,7 +162,6 @@ class Parser
                 try {
                     // parse element and retrieve values
                     $values = $elementParser['parse']($element['content'], $element['source']);
-                    // todo BEGIN
 
                     // HINT: pathTo MUST be read after elementParser.parse, because of dynamic paths
                     // Add all other options after parse too, in case of a custom plugin need to modify params.
@@ -230,17 +229,16 @@ class Parser
         return $current;
     }
 
-    private static function pathToObject($path, &$src)
+    private static function pathToObject($path, $src)
     {
         if (!$path) {
             return $src;
         }
 
         $pathParts = explode('.', $path);
-        $current = &$src;
+        $current = $src;
         for ($i = 0; $i < count($pathParts); $i++) {
-            $part = $pathParts[$i];
-            $current = &$current[$part];
+            $current = &$current[$pathParts[$i]];
         }
 
         return $current ?: [];
